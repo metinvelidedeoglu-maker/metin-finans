@@ -21,7 +21,7 @@
     normalizeState();
     editId.value=x?.id||'';
     formName.value=x?.name||'';
-    formCategory.value=x?.category||'Diğer';
+    formCategory.value=x?.category||'Kredi Kartı';
     formDate.value=x?.date||iso(new Date());
     formAmount.value=x?.amount||'';
     modalTitle.textContent=title;
@@ -78,7 +78,7 @@
   addPayment.onclick=()=>{
     paymentForm.reset();
     editId.value='';
-    formCategory.value='Diğer';
+    formCategory.value='Kredi Kartı';
     formDate.value=iso(new Date());
     modalTitle.textContent='Yeni ödeme';
     setRepeat(false,2);
