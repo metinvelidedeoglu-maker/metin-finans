@@ -10,6 +10,7 @@
   <link rel="apple-touch-icon" href="icon.svg">
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="calendar.css">
+  <link rel="stylesheet" href="repeat.css">
 </head>
 <body>
   <div id="authGate" class="auth-gate">
@@ -100,12 +101,18 @@
       <label>Kategori<select id="formCategory"><option>Kredi Kartı</option><option>Ek Hesap</option><option>Kredi</option><option>Çek</option><option>Aylık Gider</option><option>Diğer</option></select></label>
       <label>Tarih<input id="formDate" type="date" required></label>
       <label>Tutar (TL)<input id="formAmount" type="number" min="0.01" step="0.01" required></label>
+      <label class="repeat-toggle"><input id="formRepeat" type="checkbox"><span>Her ay tekrarla</span></label>
+      <div id="repeatFields" class="repeat-fields" hidden>
+        <label>Toplam ödeme sayısı<input id="formRepeatCount" type="number" min="2" max="120" step="1" value="2"></label>
+        <small>İlk ödeme dahil; sonraki kayıtlar her ay aynı güne eklenir.</small>
+      </div>
       <div class="modal-actions"><button type="button" id="closeModal">Vazgeç</button><button class="primary" type="submit">Kaydet</button></div>
     </form>
   </div>
 
   <script src="app.js"></script>
   <script src="calendar.js"></script>
+  <script src="repeat.js"></script>
   <script type="module" src="firebase.js"></script>
   <script>if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('./sw.js'));</script>
 </body>
