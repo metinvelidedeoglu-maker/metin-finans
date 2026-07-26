@@ -9,6 +9,7 @@
   <link rel="icon" href="icon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="icon.svg">
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="calendar.css">
 </head>
 <body>
   <div id="authGate" class="auth-gate">
@@ -28,6 +29,7 @@
     </div>
     <nav>
       <button class="active" data-view="dashboard">Özet</button>
+      <button data-view="calendar">Takvim</button>
       <button data-view="payments">Ödemeler</button>
       <button data-view="debts">Borçlar</button>
       <button data-view="backup">Yedek</button>
@@ -46,6 +48,29 @@
         <article class="panel"><h2>Aylık ödeme yükü</h2><div id="monthlyBars"></div></article>
         <article class="panel"><h2>Sıradaki ödemeler</h2><div id="upcomingList"></div></article>
       </div>
+    </section>
+
+    <section id="calendar" class="view">
+      <article class="panel calendar-panel">
+        <div class="calendar-header">
+          <button id="calendarPrev" class="calendar-nav-btn" aria-label="Önceki ay">‹</button>
+          <div class="calendar-title-wrap">
+            <h2 id="calendarTitle">Takvim</h2>
+            <small id="calendarMonthTotal"></small>
+          </div>
+          <div class="calendar-actions">
+            <div class="calendar-mode" role="group" aria-label="Takvim görünümü">
+              <button id="calendarStandardBtn" class="active" type="button">Standart</button>
+              <button id="calendarAgendaBtn" type="button">Ajanda</button>
+            </div>
+            <button id="calendarNext" class="calendar-nav-btn" aria-label="Sonraki ay">›</button>
+          </div>
+        </div>
+        <div id="calendarStandard" class="calendar-standard"></div>
+        <div id="calendarAgenda" class="calendar-agenda" hidden></div>
+        <div id="calendarDayDetail" class="calendar-day-detail"></div>
+        <button id="calendarAddPayment" class="calendar-fab" aria-label="Yeni ödeme ekle">+</button>
+      </article>
     </section>
 
     <section id="payments" class="view">
@@ -87,6 +112,7 @@
   </div>
 
   <script src="app.js"></script>
+  <script src="calendar.js"></script>
   <script type="module" src="firebase.js"></script>
   <script>if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('./sw.js'));</script>
 </body>
