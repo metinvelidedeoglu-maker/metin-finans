@@ -1,0 +1,12 @@
+{
+  "name":"Metin Finans",
+  "short_name":"Metin Finans",
+  "description":"Borç, ödeme, çek, kredi ve sabit gider takip uygulaması",
+  "start_url":"./",
+  "scope":"./",
+  "display":"standalone",
+  "background_color":"#eef3f7",
+  "theme_color":"#12304a",
+  "lang":"tr-TR",
+  "icons":[{"src":"icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]
+}
