@@ -5,7 +5,6 @@
   const initial=today<rangeStart?rangeStart:(today>rangeEnd?rangeEnd:today);
   let visibleMonth=new Date(initial.getFullYear(),initial.getMonth(),1);
   let selectedDate=iso(initial);
-  let mode='standard';
 
   const colors={
     'Kredi Kartı':'#df5a43',
@@ -36,10 +35,9 @@
     start.setDate(first.getDate()-mondayOffset);
     return start;
   };
-  const selectedRows=map=>map[selectedDate]||[];
 
   function renderDetail(map){
-    const rows=selectedRows(map);
+    const rows=map[selectedDate]||[];
     calendarDayDetail.innerHTML=`
       <div class="calendar-detail-head">
         <div><h3>${fd.format(parse(selectedDate))}</h3><div class="meta">${rows.length} ödeme</div></div>
@@ -57,7 +55,7 @@
         </div>`).join(''):'<div class="empty">Bu tarihte ödeme yok.</div>'}`;
   }
 
-  function standardHtml(map,start){
+  function calendarHtml(map,start){
     const days=['Pzt','Sal','Çar','Per','Cum','Cmt','Paz'];
     let html=`<div class="calendar-weekdays">${days.map(x=>`<div class="calendar-weekday">${x}</div>`).join('')}</div><div class="calendar-grid">`;
     for(let i=0;i<42;i++){
@@ -71,21 +69,6 @@
     return html+'</div>';
   }
 
-  function agendaHtml(map,start){
-    const days=['P','S','Ç','P','C','C','P'];
-    let html=`<div class="agenda-grid">${days.map(x=>`<div class="agenda-weekday">${x}</div>`).join('')}`;
-    for(let i=0;i<42;i++){
-      const d=new Date(start);d.setDate(start.getDate()+i);
-      const key=iso(d),rows=map[key]||[],sum=rows.reduce((s,x)=>s+Number(x.amount),0),other=d.getMonth()!==visibleMonth.getMonth();
-      const chips=rows.slice(0,4).map(x=>`<span class="agenda-chip" style="background:${colorFor(x.category)}" title="${esc(x.name)} · ${tl.format(x.amount)}">${esc(x.name)} -${compact(x.amount)}</span>`).join('');
-      html+=`<button class="agenda-day ${other?'other':''} ${rows.length?'has':''} ${key===selectedDate?'selected':''}" data-calendar-date="${key}">
-        <div class="agenda-day-head"><span class="agenda-day-number">${d.getDate()}</span>${rows.length?`<span class="agenda-day-total">${compact(sum)} TL</span>`:''}</div>
-        <div class="agenda-events">${chips}${rows.length>4?`<span class="agenda-more">+${rows.length-4} kayıt</span>`:''}</div>
-      </button>`;
-    }
-    return html+'</div>';
-  }
-
   function renderCalendar(){
     if(!calendarTitle)return;
     const map=byDate(),start=gridStartFor(visibleMonth),monthPrefix=iso(visibleMonth).slice(0,7);
@@ -93,12 +76,7 @@
     const monthTotal=monthRows.reduce((s,x)=>s+Number(x.amount),0);
     calendarTitle.textContent=monthName(visibleMonth);
     calendarMonthTotal.textContent=`${monthRows.length} ödeme · ${tl.format(monthTotal)}`;
-    calendarStandardBtn.classList.toggle('active',mode==='standard');
-    calendarAgendaBtn.classList.toggle('active',mode==='agenda');
-    calendarStandard.hidden=mode!=='standard';
-    calendarAgenda.hidden=mode!=='agenda';
-    if(mode==='standard')calendarStandard.innerHTML=standardHtml(map,start);
-    else calendarAgenda.innerHTML=agendaHtml(map,start);
+    calendarStandard.innerHTML=calendarHtml(map,start);
     document.querySelectorAll('[data-calendar-date]').forEach(button=>button.onclick=()=>{
       selectedDate=button.dataset.calendarDate;
       const d=parse(selectedDate);
@@ -110,8 +88,6 @@
 
   calendarPrev.onclick=()=>{visibleMonth=new Date(visibleMonth.getFullYear(),visibleMonth.getMonth()-1,1);selectedDate=iso(visibleMonth);renderCalendar()};
   calendarNext.onclick=()=>{visibleMonth=new Date(visibleMonth.getFullYear(),visibleMonth.getMonth()+1,1);selectedDate=iso(visibleMonth);renderCalendar()};
-  calendarStandardBtn.onclick=()=>{mode='standard';renderCalendar()};
-  calendarAgendaBtn.onclick=()=>{mode='agenda';renderCalendar()};
   calendarAddPayment.onclick=()=>addPayment.click();
 
   const originalSetView=setView;
