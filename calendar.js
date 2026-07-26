@@ -14,6 +14,14 @@
     'Aylık Gider':'#3da56d',
     'Diğer':'#5b8def'
   };
+  const summaryCategories=[
+    ['Kredi Kartı','Kredi Kartları'],
+    ['Ek Hesap','Ek Hesaplar'],
+    ['Kredi','Krediler'],
+    ['Çek','Çekler'],
+    ['Aylık Gider','Aylık Giderler'],
+    ['Diğer','Diğer']
+  ];
   const colorFor=category=>colors[category]||colors.Diğer;
   const compact=value=>{
     const n=Number(value)||0;
@@ -35,6 +43,25 @@
     start.setDate(first.getDate()-mondayOffset);
     return start;
   };
+
+  function renderSummary(monthRows,monthTotal){
+    const totals={},counts={};
+    monthRows.forEach(x=>{
+      totals[x.category]=(totals[x.category]||0)+Number(x.amount);
+      counts[x.category]=(counts[x.category]||0)+1;
+    });
+    calendarSummary.innerHTML=summaryCategories.map(([key,label])=>`
+      <div class="calendar-summary-card" style="--summary-color:${colorFor(key)}">
+        <span>${label}</span>
+        <b>${tl.format(totals[key]||0)}</b>
+        <small>${counts[key]||0} ödeme</small>
+      </div>`).join('')+`
+      <div class="calendar-summary-card total-card">
+        <span>Ay Toplamı</span>
+        <b>${tl.format(monthTotal)}</b>
+        <small>${monthRows.length} ödeme</small>
+      </div>`;
+  }
 
   function renderDetail(map){
     const rows=map[selectedDate]||[];
@@ -77,6 +104,7 @@
     const monthTotal=monthRows.reduce((s,x)=>s+Number(x.amount),0);
     calendarTitle.textContent=monthName(visibleMonth);
     calendarMonthTotal.textContent=`${monthRows.length} ödeme · ${tl.format(monthTotal)}`;
+    renderSummary(monthRows,monthTotal);
     calendarStandard.innerHTML=calendarHtml(map,start);
     document.querySelectorAll('[data-calendar-date]').forEach(button=>button.onclick=()=>{
       selectedDate=button.dataset.calendarDate;
