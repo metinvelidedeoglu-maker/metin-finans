@@ -51,6 +51,7 @@
           <div class="calendar-detail-actions">
             <button onclick="togglePaid('${x.id}')">${x.paid?'Geri al':'Ödendi'}</button>
             <button onclick="editPayment('${x.id}')">Düzenle</button>
+            <button onclick="repeatPayment('${x.id}')">Tekrarla</button>
           </div>
         </div>`).join(''):'<div class="empty">Bu tarihte ödeme yok.</div>'}`;
   }
