@@ -71,8 +71,8 @@
         <b>${tl.format(rows.reduce((s,x)=>s+Number(x.amount),0))}</b>
       </div>
       ${rows.length?rows.map(x=>`
-        <div class="calendar-detail-row ${x.paid?'paid':''}">
-          <div><div class="calendar-detail-name">${esc(x.name)}</div><div class="calendar-detail-meta"><span class="tag">${esc(x.category)}</span> · ${x.paid?'Ödendi':'Bekliyor'}</div></div>
+        <div class="calendar-detail-row ${x.paid?'paid':''}" data-category="${esc(x.category)}">
+          <div><div class="calendar-detail-name">${esc(x.name)}</div><div class="calendar-detail-meta"><span class="tag category-tag" data-category="${esc(x.category)}">${esc(x.category)}</span> · ${x.paid?'Ödendi':'Bekliyor'}</div></div>
           <div class="calendar-detail-amount">${tl.format(x.amount)}</div>
           <div class="calendar-detail-meta">${fd.format(parse(x.date))}</div>
           <div class="calendar-detail-actions">
