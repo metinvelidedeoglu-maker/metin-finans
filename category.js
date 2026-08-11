@@ -1,5 +1,5 @@
 (()=>{
-  const BASE_CATEGORIES=[...new Set([...(APP.once||[]).map(x=>x[2]),...(APP.recur||[]).map(x=>x[2])])];
+  const BASE_CATEGORIES=[...formCategory.options].map(x=>x.value).filter(Boolean);
   const categoryTag=category=>`<span class="tag category-tag" data-category="${esc(category)}">${esc(category)}</span>`;
   const manager=document.getElementById('categoryModal');
   const managerList=document.getElementById('categoryManagerList');
