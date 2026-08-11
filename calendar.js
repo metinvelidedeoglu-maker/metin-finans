@@ -70,17 +70,22 @@
         <div><h3>${fd.format(parse(selectedDate))}</h3><div class="meta">${rows.length} ödeme</div></div>
         <b>${tl.format(rows.reduce((s,x)=>s+Number(x.amount),0))}</b>
       </div>
-      ${rows.length?rows.map(x=>`
+      ${rows.length?rows.map(x=>{
+        const info=window.getPaymentSeriesInfo?.(x.id);
+        const seriesNote=info?`<div class="series-note">${esc(info.label)}</div>`:'';
+        const seriesActions=info?`<button onclick="editPaymentSeries('${x.id}')">Seriyi düzenle</button><button onclick="deletePaymentSeries('${x.id}')">Seriyi sil</button>`:`<button onclick="repeatPayment('${x.id}')">Tekrarla</button>`;
+        return `
         <div class="calendar-detail-row ${x.paid?'paid':''}" data-category="${esc(x.category)}">
-          <div><div class="calendar-detail-name">${esc(x.name)}</div><div class="calendar-detail-meta"><span class="tag category-tag" data-category="${esc(x.category)}">${esc(x.category)}</span> · ${x.paid?'Ödendi':'Bekliyor'}</div></div>
+          <div><div class="calendar-detail-name">${esc(x.name)}</div>${seriesNote}<div class="calendar-detail-meta"><span class="tag category-tag" data-category="${esc(x.category)}">${esc(x.category)}</span> · ${x.paid?'Ödendi':'Bekliyor'}</div></div>
           <div class="calendar-detail-amount">${tl.format(x.amount)}</div>
           <div class="calendar-detail-meta">${fd.format(parse(x.date))}</div>
           <div class="calendar-detail-actions">
             <button onclick="togglePaid('${x.id}')">${x.paid?'Geri al':'Ödendi'}</button>
             <button onclick="editPayment('${x.id}')">Düzenle</button>
-            <button onclick="repeatPayment('${x.id}')">Tekrarla</button>
+            ${seriesActions}
           </div>
-        </div>`).join(''):'<div class="empty">Bu tarihte ödeme yok.</div>'}`;
+        </div>`;
+      }).join(''):'<div class="empty">Bu tarihte ödeme yok.</div>'}`;
   }
 
   function calendarHtml(map,start){
