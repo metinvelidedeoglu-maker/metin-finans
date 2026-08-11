@@ -61,8 +61,12 @@
   renderPayments=function(){
     const a=filtered();
     paymentList.innerHTML=a.length?a.map(x=>{
-      const series=x.seriesCount?`<span class="series-note">Aylık tekrar ${x.seriesIndex}/${x.seriesCount}</span>`:'';
+      const info=window.getPaymentSeriesInfo?.(x.id);
+      const series=info?`<span class="series-note">${esc(info.label)}</span>`:'';
       const selected=selectedIds.has(x.id);
+      const repeatActions=info
+        ? `<button onclick="editPaymentSeries('${x.id}')">Seriyi düzenle</button><button onclick="deletePaymentSeries('${x.id}')">Seriyi sil</button>`
+        : `<button onclick="repeatPayment('${x.id}')">Tekrarla</button>`;
       return `<div class="payment-row bulk-payment-row ${x.paid?'paid':''} ${selected?'selected-row':''}" data-payment-id="${esc(x.id)}" data-category="${esc(x.category)}">
         <div class="payment-select"><input type="checkbox" aria-label="${esc(x.name)} seç" ${selected?'checked':''} onchange="togglePaymentSelection('${x.id}',this.checked)"></div>
         <div><div>${fd.format(parse(x.date))}</div><div class="meta">${x.paid?'Ödendi':'Bekliyor'}</div></div>
@@ -72,7 +76,7 @@
         <div class="actions">
           <button onclick="togglePaid('${x.id}')">${x.paid?'Geri al':'Ödendi'}</button>
           <button onclick="editPayment('${x.id}')">Düzenle</button>
-          <button onclick="repeatPayment('${x.id}')">Tekrarla</button>
+          ${repeatActions}
           <button onclick="deletePayment('${x.id}')">Sil</button>
         </div>
       </div>`;
