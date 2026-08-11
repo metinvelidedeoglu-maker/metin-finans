@@ -5,14 +5,14 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#12304a">
   <title>Metin Finans</title>
-  <link rel="manifest" href="manifest.webmanifest?v=10">
-  <link rel="icon" href="icon.svg?v=10" type="image/svg+xml">
-  <link rel="apple-touch-icon" href="icon.svg?v=10">
-  <link rel="stylesheet" href="style.css?v=10">
-  <link rel="stylesheet" href="calendar.css?v=10">
-  <link rel="stylesheet" href="repeat.css?v=10">
-  <link rel="stylesheet" href="bulk.css?v=10">
-  <link rel="stylesheet" href="category.css?v=10">
+  <link rel="manifest" href="manifest.webmanifest?v=11">
+  <link rel="icon" href="icon.svg?v=11" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icon.svg?v=11">
+  <link rel="stylesheet" href="style.css?v=11">
+  <link rel="stylesheet" href="calendar.css?v=11">
+  <link rel="stylesheet" href="repeat.css?v=11">
+  <link rel="stylesheet" href="bulk.css?v=11">
+  <link rel="stylesheet" href="category.css?v=11">
 </head>
 <body>
   <div id="authGate" class="auth-gate">
@@ -72,7 +72,10 @@
 
     <section id="payments" class="view">
       <article class="panel">
-        <div class="section-head"><div><h2>Ödemeler</h2><small>Ara, filtrele, düzenle ve ödendi işaretle</small></div><button id="addPayment" class="primary">Yeni ödeme</button></div>
+        <div class="section-head">
+          <div><h2>Ödemeler</h2><small>Ara, filtrele, düzenle ve ödendi işaretle</small></div>
+          <div class="section-actions"><button id="manageCategories" type="button">Kategoriler</button><button id="addPayment" class="primary">Yeni ödeme</button></div>
+        </div>
         <div class="filters">
           <input id="searchInput" type="search" placeholder="Ödeme ara">
           <select id="categoryFilter"><option value="">Tüm kategoriler</option></select>
@@ -101,7 +104,7 @@
       <h2 id="modalTitle">Yeni ödeme</h2>
       <input type="hidden" id="editId">
       <label>Ödeme adı<input id="formName" required maxlength="80"></label>
-      <label>Kategori<select id="formCategory"><option>Kredi Kartı</option><option>Ek Hesap</option><option>Kredi</option><option>Çek</option><option>Aylık Gider</option><option>Diğer</option></select></label>
+      <label>Kategori<select id="formCategory"><option>Kredi Kartı</option><option>Ek Hesap</option><option>Kredi</option><option>Çek</option><option>Aylık Gider</option></select></label>
       <label>Tarih<input id="formDate" type="date" required></label>
       <label>Tutar (TL)<input id="formAmount" type="number" min="0.01" step="0.01" required></label>
       <label class="repeat-toggle"><input id="formRepeat" type="checkbox"><span>Her ay tekrarla</span></label>
@@ -113,12 +116,25 @@
     </form>
   </div>
 
-  <script src="app.js?v=10"></script>
-  <script src="calendar.js?v=10"></script>
-  <script src="repeat.js?v=10"></script>
-  <script src="bulk.js?v=10"></script>
-  <script src="category.js?v=10"></script>
-  <script type="module" src="firebase.js?v=10"></script>
-  <script>if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=10',{updateViaCache:'none'}));</script>
+  <div id="categoryModal" class="modal">
+    <div class="modal-box category-modal-box">
+      <h2>Kategoriler</h2>
+      <p class="category-help">Mevcut 5 kategori sabit kalır. Yeni kategori ekleyebilir, boş olan ek kategorileri silebilirsin.</p>
+      <form id="categoryAddForm" class="category-add-form">
+        <input id="newCategoryName" maxlength="40" autocomplete="off" placeholder="Yeni kategori adı" required>
+        <button class="primary" type="submit">Ekle</button>
+      </form>
+      <div id="categoryManagerList" class="category-manager-list"></div>
+      <div class="modal-actions"><button type="button" id="closeCategoryModal">Kapat</button></div>
+    </div>
+  </div>
+
+  <script src="app.js?v=11"></script>
+  <script src="calendar.js?v=11"></script>
+  <script src="repeat.js?v=11"></script>
+  <script src="bulk.js?v=11"></script>
+  <script src="category.js?v=11"></script>
+  <script type="module" src="firebase.js?v=11"></script>
+  <script>if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=11',{updateViaCache:'none'}));</script>
 </body>
 </html>
