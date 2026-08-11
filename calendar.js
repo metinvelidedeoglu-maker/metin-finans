@@ -11,18 +11,19 @@
     'Ek Hesap':'#b74736',
     'Kredi':'#d46b58',
     'Çek':'#6d74cf',
-    'Aylık Gider':'#3da56d',
+    'Aylık Gider':'#3aa36b',
     'Diğer':'#5b8def'
   };
-  const summaryCategories=[
-    ['Kredi Kartı','Kredi Kartları'],
-    ['Ek Hesap','Ek Hesaplar'],
-    ['Kredi','Krediler'],
-    ['Çek','Çekler'],
-    ['Aylık Gider','Aylık Giderler'],
-    ['Diğer','Diğer']
-  ];
-  const colorFor=category=>colors[category]||colors.Diğer;
+  const summaryLabels={
+    'Kredi Kartı':'Kredi Kartları',
+    'Ek Hesap':'Ek Hesaplar',
+    'Kredi':'Krediler',
+    'Çek':'Çekler',
+    'Aylık Gider':'Aylık Giderler'
+  };
+  const defaultCategories=()=>[...new Set([...(APP.once||[]).map(x=>x[2]),...(APP.recur||[]).map(x=>x[2])])];
+  const summaryCategories=()=>window.getAllPaymentCategories?.()||defaultCategories();
+  const colorFor=category=>colors[category]||'#596b7a';
   const compact=value=>{
     const n=Number(value)||0;
     if(n>=1000000)return `${(n/1000000).toFixed(n>=10000000?0:1).replace('.',',')} Mn`;
@@ -50,9 +51,9 @@
       totals[x.category]=(totals[x.category]||0)+Number(x.amount);
       counts[x.category]=(counts[x.category]||0)+1;
     });
-    calendarSummary.innerHTML=summaryCategories.map(([key,label])=>`
+    calendarSummary.innerHTML=summaryCategories().map(key=>`
       <div class="calendar-summary-card" style="--summary-color:${colorFor(key)}">
-        <span>${label}</span>
+        <span>${esc(summaryLabels[key]||key)}</span>
         <b>${tl.format(totals[key]||0)}</b>
         <small>${counts[key]||0} ödeme</small>
       </div>`).join('')+`
