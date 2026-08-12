@@ -5,21 +5,21 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#12304a">
   <title>Metin Finans</title>
-  <link rel="manifest" href="manifest.webmanifest?v=13">
-  <link rel="icon" href="icon.svg?v=13" type="image/svg+xml">
-  <link rel="apple-touch-icon" href="icon.svg?v=13">
-  <link rel="stylesheet" href="style.css?v=13">
-  <link rel="stylesheet" href="calendar.css?v=13">
-  <link rel="stylesheet" href="repeat.css?v=13">
-  <link rel="stylesheet" href="bulk.css?v=13">
-  <link rel="stylesheet" href="category.css?v=13">
+  <link rel="manifest" href="manifest.webmanifest?v=14">
+  <link rel="icon" href="icon.svg?v=14" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icon.svg?v=14">
+  <link rel="stylesheet" href="style.css?v=14">
+  <link rel="stylesheet" href="calendar.css?v=14">
+  <link rel="stylesheet" href="repeat.css?v=14">
+  <link rel="stylesheet" href="bulk.css?v=14">
+  <link rel="stylesheet" href="category.css?v=14">
 </head>
 <body>
   <div id="authGate" class="auth-gate">
     <div class="auth-box">
       <div class="logo">MF</div>
       <h1>Metin Finans</h1>
-      <p>Telefon ve bilgisayardaki ödemeleri otomatik eşitle.</p>
+      <p>Telefon ve bilgisayardaki harcamaları otomatik eşitle.</p>
       <button id="googleSignInBtn" class="google-btn">Google ile giriş yap</button>
       <div id="authError" class="error"></div>
     </div>
@@ -27,32 +27,32 @@
 
   <header>
     <div class="head-row">
-      <div><strong>Metin Finans</strong><small>Borç ve ödeme takvimi</small></div>
+      <div><strong>Metin Finans</strong><small>Harcama takvimi</small></div>
       <div class="head-actions"><span id="saveStatus">Bağlantı hazırlanıyor</span><button id="signOutBtn" hidden>Çıkış</button></div>
     </div>
     <nav>
       <button class="active" data-view="dashboard">Özet</button>
       <button data-view="calendar">Takvim</button>
-      <button data-view="payments">Ödemeler</button>
+      <button data-view="payments">Harcamalar</button>
       <button data-view="backup">Yedek</button>
     </nav>
   </header>
 
   <main>
     <section id="dashboard" class="view active">
-      <div class="kpis">
+      <div class="kpis" hidden aria-hidden="true">
         <article><span>Planlanan toplam</span><b id="kpiTotal">—</b></article>
         <article><span>Ödenen</span><b id="kpiPaid">—</b></article>
         <article><span>Kalan</span><b id="kpiRemaining">—</b></article>
         <article><span>Ağustos 2026</span><b id="kpiAugust">—</b></article>
       </div>
       <article class="panel dashboard-category-panel">
-        <div class="dashboard-category-head"><h2>Kategori Toplamları</h2><small>Tüm planlanan ödemeler</small></div>
+        <div class="dashboard-category-head"><h2>Kategori Toplamları</h2><small>Tüm kayıtlı harcamalar</small></div>
         <div id="dashboardCategoryTotals" class="dashboard-category-totals"></div>
       </article>
       <div class="two-col">
-        <article class="panel"><h2>Aylık ödeme yükü</h2><div id="monthlyBars"></div></article>
-        <article class="panel"><h2>Sıradaki ödemeler</h2><div id="upcomingList"></div></article>
+        <article class="panel"><h2>Aylık harcama yükü</h2><div id="monthlyBars"></div></article>
+        <article class="panel"><h2>Yaklaşan harcamalar</h2><div id="upcomingList"></div></article>
       </div>
     </section>
 
@@ -69,20 +69,20 @@
         <div id="calendarSummary" class="calendar-summary"></div>
         <div id="calendarStandard" class="calendar-standard"></div>
         <div id="calendarDayDetail" class="calendar-day-detail"></div>
-        <button id="calendarAddPayment" class="calendar-fab" aria-label="Yeni ödeme ekle">+</button>
+        <button id="calendarAddPayment" class="calendar-fab" aria-label="Yeni harcama ekle">+</button>
       </article>
     </section>
 
     <section id="payments" class="view">
       <article class="panel">
         <div class="section-head">
-          <div><h2>Ödemeler</h2><small>Ara, filtrele, düzenle ve ödendi işaretle</small></div>
-          <div class="section-actions"><button id="manageCategories" type="button">Kategoriler</button><button id="addPayment" class="primary">Yeni ödeme</button></div>
+          <div><h2>Harcamalar</h2><small>Ara, filtrele, düzenle veya sil</small></div>
+          <div class="section-actions"><button id="manageCategories" type="button">Kategoriler</button><button id="addPayment" class="primary">Yeni harcama</button></div>
         </div>
         <div class="filters">
-          <input id="searchInput" type="search" placeholder="Ödeme ara">
+          <input id="searchInput" type="search" placeholder="Harcama ara">
           <select id="categoryFilter"><option value="">Tüm kategoriler</option></select>
-          <select id="statusFilter"><option value="">Tüm durumlar</option><option value="unpaid">Ödenmemiş</option><option value="paid">Ödenmiş</option></select>
+          <select id="statusFilter" hidden aria-hidden="true"><option value=""></option></select>
           <select id="monthFilter"><option value="">Tüm aylar</option></select>
         </div>
         <div id="paymentList"></div>
@@ -96,23 +96,23 @@
     <section id="backup" class="view">
       <div class="two-col">
         <article class="panel"><h2>Yedekleme</h2><p>Veriler Firebase'de eşitlenir. Ayrıca dosya yedeği alabilirsin.</p><button id="exportJson" class="primary wide">Yedek indir</button><label class="button wide">Yedek yükle<input id="importJson" type="file" accept=".json" hidden></label></article>
-        <article class="panel"><h2>CSV</h2><p>Ödeme listesini Excel'de açılabilir biçimde indir.</p><button id="exportCsv" class="wide">CSV indir</button></article>
+        <article class="panel"><h2>CSV</h2><p>Harcama listesini Excel'de açılabilir biçimde indir.</p><button id="exportCsv" class="wide">CSV indir</button></article>
       </div>
     </section>
   </main>
 
   <div id="modal" class="modal">
     <form id="paymentForm" class="modal-box">
-      <h2 id="modalTitle">Yeni ödeme</h2>
+      <h2 id="modalTitle">Yeni harcama</h2>
       <input type="hidden" id="editId">
-      <label>Ödeme adı<input id="formName" required maxlength="80"></label>
+      <label>Harcama adı<input id="formName" required maxlength="80"></label>
       <label>Kategori<select id="formCategory"><option>Kredi Kartı</option><option>Ek Hesap</option><option>Kredi</option><option>Çek</option><option>Aylık Gider</option></select></label>
       <label>Tarih<input id="formDate" type="date" required></label>
       <label>Tutar (TL)<input id="formAmount" type="number" min="0.01" step="0.01" required></label>
       <label class="repeat-toggle"><input id="formRepeat" type="checkbox"><span>Her ay tekrarla</span></label>
       <div id="repeatFields" class="repeat-fields" hidden>
-        <label>Toplam ödeme sayısı<input id="formRepeatCount" type="number" min="2" max="120" step="1" value="2"></label>
-        <small>İlk ödeme dahil; sonraki kayıtlar her ay aynı güne eklenir.</small>
+        <label>Toplam harcama sayısı<input id="formRepeatCount" type="number" min="2" max="120" step="1" value="2"></label>
+        <small>İlk harcama dahil; sonraki kayıtlar her ay aynı güne eklenir.</small>
       </div>
       <div class="modal-actions"><button type="button" id="closeModal">Vazgeç</button><button class="primary" type="submit">Kaydet</button></div>
     </form>
@@ -131,12 +131,12 @@
     </div>
   </div>
 
-  <script src="app.js?v=13"></script>
-  <script src="calendar.js?v=13"></script>
-  <script src="repeat.js?v=13"></script>
-  <script src="bulk.js?v=13"></script>
-  <script src="category.js?v=13"></script>
-  <script type="module" src="firebase.js?v=13"></script>
-  <script>if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=13',{updateViaCache:'none'}));</script>
+  <script src="app.js?v=14"></script>
+  <script src="calendar.js?v=14"></script>
+  <script src="repeat.js?v=14"></script>
+  <script src="bulk.js?v=14"></script>
+  <script src="category.js?v=14"></script>
+  <script type="module" src="firebase.js?v=14"></script>
+  <script>if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=14',{updateViaCache:'none'}));</script>
 </body>
 </html>
