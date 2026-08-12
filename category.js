@@ -7,6 +7,7 @@
   const managerClose=document.getElementById('closeCategoryModal');
   const addForm=document.getElementById('categoryAddForm');
   const addInput=document.getElementById('newCategoryName');
+  const dashboardTotals=document.getElementById('dashboardCategoryTotals');
 
   function normalizeCategories(){
     if(!Array.isArray(state.customCategories))state.customCategories=[];
@@ -95,11 +96,25 @@
     addInput.value='';
     refreshCategorySelects();
     renderManager();
+    renderDashboard();
   };
 
   if(managerOpen)managerOpen.onclick=()=>{renderManager();manager.classList.add('open');setTimeout(()=>addInput?.focus(),50)};
   if(managerClose)managerClose.onclick=()=>manager.classList.remove('open');
   if(manager)manager.onclick=e=>{if(e.target===manager)manager.classList.remove('open')};
+
+  function renderCategoryTotals(a){
+    if(!dashboardTotals)return;
+    const totals={};
+    a.forEach(x=>totals[x.category]=(totals[x.category]||0)+Number(x.amount));
+    const cats=allCategories();
+    dashboardTotals.innerHTML=cats.map(name=>`
+      <div class="dashboard-category-card" data-category="${esc(name)}">
+        <div>${categoryTag(name)}</div>
+        <b>${tl.format(totals[name]||0)}</b>
+        <small>${a.filter(x=>x.category===name).length} ödeme</small>
+      </div>`).join('');
+  }
 
   renderDashboard=function(){
     const a=payments(),sum=a.reduce((s,x)=>s+Number(x.amount),0),paid=a.filter(x=>x.paid).reduce((s,x)=>s+Number(x.amount),0),monthly={};
@@ -108,6 +123,7 @@
     kpiPaid.textContent=tl.format(paid);
     kpiRemaining.textContent=tl.format(sum-paid);
     kpiAugust.textContent=tl.format(monthly['2026-08']||0);
+    renderCategoryTotals(a);
     const keys=Object.keys(monthly).sort().slice(0,12),max=Math.max(1,...keys.map(k=>monthly[k]));
     monthlyBars.innerHTML=keys.map(k=>`<div class="bar-row"><span>${esc(fms.format(parse(k+'-01')))}</span><div class="bar-track"><div class="bar-fill" style="width:${monthly[k]/max*100}%"></div></div><span class="bar-value">${tl.format(monthly[k])}</span></div>`).join('');
     const up=a.filter(x=>!x.paid).slice(0,8);
@@ -115,17 +131,18 @@
   };
 
   renderDebts=function(){
+    const grid=document.getElementById('debtGrid');
+    if(!grid)return;
     const groups={};
     APP.debts.forEach(([,c,n])=>groups[c]=(groups[c]||0)+n);
     const total=Object.values(groups).reduce((a,b)=>a+b,0);
-    debtGrid.innerHTML=[...Object.entries(groups),['Toplam',total]].map(([k,v])=>`<article class="debt-card"><h3>${esc(k)}</h3><b>${tl.format(v)}</b></article>`).join('')+`<article class="panel" style="grid-column:1/-1"><h2>Borç kalemleri</h2>${APP.debts.map(([n,c,v])=>`<div class="upcoming-row category-row" data-category="${esc(c)}"><div><div class="payment-name">${esc(n)}</div><div class="meta">${categoryTag(c)}</div></div><div class="amount">${tl.format(v)}</div></div>`).join('')}</article>`;
+    grid.innerHTML=[...Object.entries(groups),['Toplam',total]].map(([k,v])=>`<article class="debt-card"><h3>${esc(k)}</h3><b>${tl.format(v)}</b></article>`).join('')+`<article class="panel" style="grid-column:1/-1"><h2>Borç kalemleri</h2>${APP.debts.map(([n,c,v])=>`<div class="upcoming-row category-row" data-category="${esc(c)}"><div><div class="payment-name">${esc(n)}</div><div class="meta">${categoryTag(c)}</div></div><div class="amount">${tl.format(v)}</div></div>`).join('')}</article>`;
   };
 
   const previousRenderAll=renderAll;
-  renderAll=function(){previousRenderAll();refreshCategorySelects();if(manager?.classList.contains('open'))renderManager()};
+  renderAll=function(){previousRenderAll();refreshCategorySelects();renderCategoryTotals(payments());if(manager?.classList.contains('open'))renderManager()};
 
   refreshCategorySelects();
   renderManager();
   renderDashboard();
-  renderDebts();
 })();
