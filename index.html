@@ -5,14 +5,14 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#12304a">
   <title>Metin Finans</title>
-  <link rel="manifest" href="manifest.webmanifest?v=12">
-  <link rel="icon" href="icon.svg?v=12" type="image/svg+xml">
-  <link rel="apple-touch-icon" href="icon.svg?v=12">
-  <link rel="stylesheet" href="style.css?v=12">
-  <link rel="stylesheet" href="calendar.css?v=12">
-  <link rel="stylesheet" href="repeat.css?v=12">
-  <link rel="stylesheet" href="bulk.css?v=12">
-  <link rel="stylesheet" href="category.css?v=12">
+  <link rel="manifest" href="manifest.webmanifest?v=13">
+  <link rel="icon" href="icon.svg?v=13" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icon.svg?v=13">
+  <link rel="stylesheet" href="style.css?v=13">
+  <link rel="stylesheet" href="calendar.css?v=13">
+  <link rel="stylesheet" href="repeat.css?v=13">
+  <link rel="stylesheet" href="bulk.css?v=13">
+  <link rel="stylesheet" href="category.css?v=13">
 </head>
 <body>
   <div id="authGate" class="auth-gate">
@@ -34,7 +34,6 @@
       <button class="active" data-view="dashboard">Özet</button>
       <button data-view="calendar">Takvim</button>
       <button data-view="payments">Ödemeler</button>
-      <button data-view="debts">Borçlar</button>
       <button data-view="backup">Yedek</button>
     </nav>
   </header>
@@ -47,6 +46,10 @@
         <article><span>Kalan</span><b id="kpiRemaining">—</b></article>
         <article><span>Ağustos 2026</span><b id="kpiAugust">—</b></article>
       </div>
+      <article class="panel dashboard-category-panel">
+        <div class="dashboard-category-head"><h2>Kategori Toplamları</h2><small>Tüm planlanan ödemeler</small></div>
+        <div id="dashboardCategoryTotals" class="dashboard-category-totals"></div>
+      </article>
       <div class="two-col">
         <article class="panel"><h2>Aylık ödeme yükü</h2><div id="monthlyBars"></div></article>
         <article class="panel"><h2>Sıradaki ödemeler</h2><div id="upcomingList"></div></article>
@@ -86,9 +89,8 @@
       </article>
     </section>
 
-    <section id="debts" class="view">
-      <div class="notice">Buradaki rakamlar kullanılan limit ve kalan anapara bilgileridir.</div>
-      <div id="debtGrid" class="debt-grid"></div>
+    <section id="debts" class="view" hidden aria-hidden="true">
+      <div id="debtGrid"></div>
     </section>
 
     <section id="backup" class="view">
@@ -129,12 +131,12 @@
     </div>
   </div>
 
-  <script src="app.js?v=12"></script>
-  <script src="calendar.js?v=12"></script>
-  <script src="repeat.js?v=12"></script>
-  <script src="bulk.js?v=12"></script>
-  <script src="category.js?v=12"></script>
-  <script type="module" src="firebase.js?v=12"></script>
-  <script>if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=12',{updateViaCache:'none'}));</script>
+  <script src="app.js?v=13"></script>
+  <script src="calendar.js?v=13"></script>
+  <script src="repeat.js?v=13"></script>
+  <script src="bulk.js?v=13"></script>
+  <script src="category.js?v=13"></script>
+  <script type="module" src="firebase.js?v=13"></script>
+  <script>if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=13',{updateViaCache:'none'}));</script>
 </body>
 </html>
