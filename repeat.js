@@ -166,7 +166,7 @@
     editId.value='';
     formCategory.value='Kredi Kartı';
     formDate.value=iso(new Date());
-    modalTitle.textContent='Yeni ödeme';
+    modalTitle.textContent='Yeni harcama';
     setSeriesEditMode(false);
     setRepeat(false,2);
     openModal();
@@ -174,19 +174,19 @@
 
   window.editPayment=id=>{
     const x=payments().find(p=>p.id===id);
-    if(x)fillModal(x,'Ödemeyi düzenle',false,null);
+    if(x)fillModal(x,'Harcamayı düzenle',false,null);
   };
 
   window.repeatPayment=id=>{
     const x=payments().find(p=>p.id===id);
-    if(x)fillModal(x,'Ödemeyi tekrarla',true,null);
+    if(x)fillModal(x,'Harcamayı tekrarla',true,null);
   };
 
   window.editPaymentSeries=id=>{
     const x=payments().find(p=>p.id===id);
     const descriptor=getSeriesDescriptor(x);
     if(!x||!descriptor)return;
-    fillModal(x,`Seriyi düzenle · ${descriptor.members.length} ödeme`,false,{selectedId:id,descriptor});
+    fillModal(x,`Seriyi düzenle · ${descriptor.members.length} harcama`,false,{selectedId:id,descriptor});
   };
 
   window.deletePaymentSeries=id=>{
@@ -194,7 +194,7 @@
     const descriptor=getSeriesDescriptor(x);
     if(!descriptor)return;
     const count=descriptor.members.length;
-    if(!confirm(`${count} tekrarlanan ödemenin tamamı silinsin mi?`))return;
+    if(!confirm(`${count} tekrarlanan harcamanın tamamı silinsin mi?`))return;
     descriptor.members.map(x=>x.id).forEach(deleteOne);
     save();
     fillFilters();
@@ -240,13 +240,12 @@
       const info=infoFor(x.id);
       const series=info?`<span class="series-note">${info.label}</span>`:'';
       const seriesActions=info?`<button onclick="editPaymentSeries('${x.id}')">Seriyi düzenle</button><button onclick="deletePaymentSeries('${x.id}')">Seriyi sil</button>`:`<button onclick="repeatPayment('${x.id}')">Tekrarla</button>`;
-      return `<div class="payment-row ${x.paid?'paid':''}">
-        <div><div>${fd.format(parse(x.date))}</div><div class="meta">${x.paid?'Ödendi':'Bekliyor'}</div></div>
+      return `<div class="payment-row">
+        <div><div>${fd.format(parse(x.date))}</div></div>
         <div><div class="payment-name">${esc(x.name)}</div>${series}</div>
         <div class="category"><span class="tag">${esc(x.category)}</span></div>
         <div class="amount">${tl.format(x.amount)}</div>
         <div class="actions">
-          <button onclick="togglePaid('${x.id}')">${x.paid?'Geri al':'Ödendi'}</button>
           <button onclick="editPayment('${x.id}')">Düzenle</button>
           ${seriesActions}
           <button onclick="deletePayment('${x.id}')">Sil</button>
