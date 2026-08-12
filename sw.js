@@ -1,5 +1,5 @@
-const CACHE='metin-finans-v13';
-const SHELL=['./','./index.html','./style.css?v=13','./calendar.css?v=13','./repeat.css?v=13','./bulk.css?v=13','./category.css?v=13','./app.js?v=13','./calendar.js?v=13','./repeat.js?v=13','./bulk.js?v=13','./category.js?v=13','./firebase.js?v=13','./manifest.webmanifest?v=13','./icon.svg?v=13'];
+const CACHE='metin-finans-v14';
+const SHELL=['./','./index.html','./style.css?v=14','./calendar.css?v=14','./repeat.css?v=14','./bulk.css?v=14','./category.css?v=14','./app.js?v=14','./calendar.js?v=14','./repeat.js?v=14','./bulk.js?v=14','./category.js?v=14','./firebase.js?v=14','./manifest.webmanifest?v=14','./icon.svg?v=14'];
 self.addEventListener('install',event=>{
   event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(SHELL)));
   self.skipWaiting();
