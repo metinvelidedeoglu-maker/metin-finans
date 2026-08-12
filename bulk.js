@@ -50,7 +50,7 @@
   deleteButton.onclick=()=>{
     const count=selectedIds.size;
     if(!count)return;
-    if(!confirm(`${count} ödeme silinsin mi?`))return;
+    if(!confirm(`${count} harcama silinsin mi?`))return;
     [...selectedIds].forEach(deleteOne);
     selectedIds.clear();
     save();
@@ -67,14 +67,13 @@
       const repeatActions=info
         ? `<button onclick="editPaymentSeries('${x.id}')">Seriyi düzenle</button><button onclick="deletePaymentSeries('${x.id}')">Seriyi sil</button>`
         : `<button onclick="repeatPayment('${x.id}')">Tekrarla</button>`;
-      return `<div class="payment-row bulk-payment-row ${x.paid?'paid':''} ${selected?'selected-row':''}" data-payment-id="${esc(x.id)}" data-category="${esc(x.category)}">
+      return `<div class="payment-row bulk-payment-row ${selected?'selected-row':''}" data-payment-id="${esc(x.id)}" data-category="${esc(x.category)}">
         <div class="payment-select"><input type="checkbox" aria-label="${esc(x.name)} seç" ${selected?'checked':''} onchange="togglePaymentSelection('${x.id}',this.checked)"></div>
-        <div><div>${fd.format(parse(x.date))}</div><div class="meta">${x.paid?'Ödendi':'Bekliyor'}</div></div>
+        <div><div>${fd.format(parse(x.date))}</div></div>
         <div><div class="payment-name">${esc(x.name)}</div>${series}</div>
         <div class="category"><span class="tag category-tag" data-category="${esc(x.category)}">${esc(x.category)}</span></div>
         <div class="amount">${tl.format(x.amount)}</div>
         <div class="actions">
-          <button onclick="togglePaid('${x.id}')">${x.paid?'Geri al':'Ödendi'}</button>
           <button onclick="editPayment('${x.id}')">Düzenle</button>
           ${repeatActions}
           <button onclick="deletePayment('${x.id}')">Sil</button>
@@ -84,6 +83,6 @@
     updateBulkBar();
   };
 
-  [searchInput,categoryFilter,statusFilter,monthFilter].forEach(x=>x.addEventListener('input',()=>setTimeout(updateBulkBar,0)));
+  [searchInput,categoryFilter,monthFilter].forEach(x=>x.addEventListener('input',()=>setTimeout(updateBulkBar,0)));
   renderPayments();
 })();
