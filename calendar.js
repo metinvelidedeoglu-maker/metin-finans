@@ -11,18 +11,19 @@
     'Ek Hesap':'#b74736',
     'Kredi':'#d46b58',
     'Çek':'#6d74cf',
-    'Aylık Gider':'#3da56d',
+    'Aylık Gider':'#3aa36b',
     'Diğer':'#5b8def'
   };
-  const summaryCategories=[
-    ['Kredi Kartı','Kredi Kartları'],
-    ['Ek Hesap','Ek Hesaplar'],
-    ['Kredi','Krediler'],
-    ['Çek','Çekler'],
-    ['Aylık Gider','Aylık Giderler'],
-    ['Diğer','Diğer']
-  ];
-  const colorFor=category=>colors[category]||colors.Diğer;
+  const summaryLabels={
+    'Kredi Kartı':'Kredi Kartları',
+    'Ek Hesap':'Ek Hesaplar',
+    'Kredi':'Krediler',
+    'Çek':'Çekler',
+    'Aylık Gider':'Aylık Giderler'
+  };
+  const defaultCategories=()=>[...new Set([...(APP.once||[]).map(x=>x[2]),...(APP.recur||[]).map(x=>x[2])])];
+  const summaryCategories=()=>window.getAllPaymentCategories?.()||defaultCategories();
+  const colorFor=category=>colors[category]||'#596b7a';
   const compact=value=>{
     const n=Number(value)||0;
     if(n>=1000000)return `${(n/1000000).toFixed(n>=10000000?0:1).replace('.',',')} Mn`;
@@ -50,16 +51,16 @@
       totals[x.category]=(totals[x.category]||0)+Number(x.amount);
       counts[x.category]=(counts[x.category]||0)+1;
     });
-    calendarSummary.innerHTML=summaryCategories.map(([key,label])=>`
+    calendarSummary.innerHTML=summaryCategories().map(key=>`
       <div class="calendar-summary-card" style="--summary-color:${colorFor(key)}">
-        <span>${label}</span>
+        <span>${esc(summaryLabels[key]||key)}</span>
         <b>${tl.format(totals[key]||0)}</b>
-        <small>${counts[key]||0} ödeme</small>
+        <small>${counts[key]||0} harcama</small>
       </div>`).join('')+`
       <div class="calendar-summary-card total-card">
         <span>Ay Toplamı</span>
         <b>${tl.format(monthTotal)}</b>
-        <small>${monthRows.length} ödeme</small>
+        <small>${monthRows.length} harcama</small>
       </div>`;
   }
 
@@ -67,20 +68,24 @@
     const rows=map[selectedDate]||[];
     calendarDayDetail.innerHTML=`
       <div class="calendar-detail-head">
-        <div><h3>${fd.format(parse(selectedDate))}</h3><div class="meta">${rows.length} ödeme</div></div>
+        <div><h3>${fd.format(parse(selectedDate))}</h3><div class="meta">${rows.length} harcama</div></div>
         <b>${tl.format(rows.reduce((s,x)=>s+Number(x.amount),0))}</b>
       </div>
-      ${rows.length?rows.map(x=>`
-        <div class="calendar-detail-row ${x.paid?'paid':''}">
-          <div><div class="calendar-detail-name">${esc(x.name)}</div><div class="calendar-detail-meta"><span class="tag">${esc(x.category)}</span> · ${x.paid?'Ödendi':'Bekliyor'}</div></div>
+      ${rows.length?rows.map(x=>{
+        const info=window.getPaymentSeriesInfo?.(x.id);
+        const seriesNote=info?`<div class="series-note">${esc(info.label)}</div>`:'';
+        const seriesActions=info?`<button onclick="editPaymentSeries('${x.id}')">Seriyi düzenle</button><button onclick="deletePaymentSeries('${x.id}')">Seriyi sil</button>`:`<button onclick="repeatPayment('${x.id}')">Tekrarla</button>`;
+        return `
+        <div class="calendar-detail-row" data-category="${esc(x.category)}">
+          <div><div class="calendar-detail-name">${esc(x.name)}</div>${seriesNote}<div class="calendar-detail-meta"><span class="tag category-tag" data-category="${esc(x.category)}">${esc(x.category)}</span></div></div>
           <div class="calendar-detail-amount">${tl.format(x.amount)}</div>
           <div class="calendar-detail-meta">${fd.format(parse(x.date))}</div>
           <div class="calendar-detail-actions">
-            <button onclick="togglePaid('${x.id}')">${x.paid?'Geri al':'Ödendi'}</button>
             <button onclick="editPayment('${x.id}')">Düzenle</button>
-            <button onclick="repeatPayment('${x.id}')">Tekrarla</button>
+            ${seriesActions}
           </div>
-        </div>`).join(''):'<div class="empty">Bu tarihte ödeme yok.</div>'}`;
+        </div>`;
+      }).join(''):'<div class="empty">Bu tarihte harcama yok.</div>'}`;
   }
 
   function calendarHtml(map,start){
@@ -103,7 +108,7 @@
     const monthRows=payments().filter(x=>x.date.startsWith(monthPrefix));
     const monthTotal=monthRows.reduce((s,x)=>s+Number(x.amount),0);
     calendarTitle.textContent=monthName(visibleMonth);
-    calendarMonthTotal.textContent=`${monthRows.length} ödeme · ${tl.format(monthTotal)}`;
+    calendarMonthTotal.textContent=`${monthRows.length} harcama · ${tl.format(monthTotal)}`;
     renderSummary(monthRows,monthTotal);
     calendarStandard.innerHTML=calendarHtml(map,start);
     document.querySelectorAll('[data-calendar-date]').forEach(button=>button.onclick=()=>{
