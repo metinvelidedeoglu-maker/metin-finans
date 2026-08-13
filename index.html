@@ -5,13 +5,13 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#12304a">
   <title>Metin Finans</title>
-  <link rel="manifest" href="manifest.webmanifest?v=7">
-  <link rel="icon" href="icon.svg?v=7" type="image/svg+xml">
-  <link rel="apple-touch-icon" href="icon.svg?v=7">
-  <link rel="stylesheet" href="style.css?v=7">
-  <link rel="stylesheet" href="calendar.css?v=7">
-  <link rel="stylesheet" href="repeat.css?v=7">
-  <link rel="stylesheet" href="bulk.css?v=7">
+  <link rel="manifest" href="manifest.webmanifest?v=8">
+  <link rel="icon" href="icon.svg?v=8" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icon.svg?v=8">
+  <link rel="stylesheet" href="style.css?v=8">
+  <link rel="stylesheet" href="calendar.css?v=8">
+  <link rel="stylesheet" href="repeat.css?v=8">
+  <link rel="stylesheet" href="bulk.css?v=8">
 </head>
 <body>
   <div id="authGate" class="auth-gate">
@@ -78,6 +78,15 @@
           <select id="statusFilter"><option value="">Tüm durumlar</option><option value="unpaid">Ödenmemiş</option><option value="paid">Ödenmiş</option></select>
           <select id="monthFilter"><option value="">Tüm aylar</option></select>
         </div>
+        <div class="payment-totals" aria-live="polite">
+          <div class="payment-total-card filtered-total"><span>Filtrelenmiş toplam</span><b id="filteredPaymentTotal">—</b><small id="filteredPaymentNote">Görüntülenen ödemeler</small></div>
+          <div class="payment-total-card"><span>Tüm toplam</span><b id="allPaymentTotal">—</b><small>Filtrelerden etkilenmez</small></div>
+          <div class="payment-total-card"><span>Gösterilen kayıt</span><b id="visiblePaymentCount">—</b><small id="paymentCountNote">Toplam kayıt</small></div>
+        </div>
+        <div class="payment-category-totals">
+          <div class="payment-category-head"><strong>Kategori bazlı toplamlar</strong><small id="categoryTotalsNote">Genel toplamlar</small></div>
+          <div id="paymentCategoryTotals" class="payment-category-grid"></div>
+        </div>
         <div id="paymentList"></div>
       </article>
     </section>
@@ -112,11 +121,11 @@
     </form>
   </div>
 
-  <script src="app.js?v=7"></script>
-  <script src="calendar.js?v=7"></script>
-  <script src="repeat.js?v=7"></script>
-  <script src="bulk.js?v=7"></script>
-  <script type="module" src="firebase.js?v=7"></script>
-  <script>if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=7',{updateViaCache:'none'}));</script>
+  <script src="app.js?v=8"></script>
+  <script src="calendar.js?v=8"></script>
+  <script src="repeat.js?v=8"></script>
+  <script src="bulk.js?v=8"></script>
+  <script type="module" src="firebase.js?v=8"></script>
+  <script>if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=8',{updateViaCache:'none'}));</script>
 </body>
 </html>
