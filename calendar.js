@@ -96,7 +96,7 @@
       const key=iso(d),rows=map[key]||[],sum=rows.reduce((s,x)=>s+Number(x.amount),0),other=d.getMonth()!==visibleMonth.getMonth();
       html+=`<button class="calendar-day ${other?'other':''} ${rows.length?'has':''} ${key===selectedDate?'selected':''}" data-calendar-date="${key}">
         <div class="calendar-day-top"><span class="calendar-day-number">${d.getDate()}</span>${rows.length?`<span class="calendar-day-total">${compact(sum)} TL</span>`:''}</div>
-        ${rows.length?`<div class="calendar-dots">${rows.slice(0,7).map(x=>`<span class="calendar-dot" style="background:${colorFor(x.category)}"></span>`).join('')}</div><div class="calendar-day-names">${rows.slice(0,3).map(x=>`<span class="calendar-mini-name">${esc(x.name)}</span>`).join('')}</div>`:''}
+        ${rows.length?`<div class="calendar-dots">${rows.slice(0,7).map(x=>`<span class="calendar-dot" style="background:${colorFor(x.category)}"></span>`).join('')}</div><div class="calendar-day-names">${rows.slice(0,3).map(x=>`<span class="calendar-mini-row"><span class="calendar-mini-name">${esc(x.name)}</span><span class="calendar-mini-amount">${tl.format(x.amount)}</span></span>`).join('')}</div>`:''}
       </button>`;
     }
     return html+'</div>';
