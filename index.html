@@ -5,14 +5,14 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#12304a">
   <title>Metin Finans</title>
-  <link rel="manifest" href="manifest.webmanifest?v=15">
-  <link rel="icon" href="icon.svg?v=15" type="image/svg+xml">
-  <link rel="apple-touch-icon" href="icon.svg?v=15">
-  <link rel="stylesheet" href="style.css?v=15">
-  <link rel="stylesheet" href="calendar.css?v=15">
-  <link rel="stylesheet" href="repeat.css?v=15">
-  <link rel="stylesheet" href="bulk.css?v=15">
-  <link rel="stylesheet" href="category.css?v=15">
+  <link rel="manifest" href="manifest.webmanifest?v=16">
+  <link rel="icon" href="icon.svg?v=16" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icon.svg?v=16">
+  <link rel="stylesheet" href="style.css?v=16">
+  <link rel="stylesheet" href="calendar.css?v=16">
+  <link rel="stylesheet" href="repeat.css?v=16">
+  <link rel="stylesheet" href="bulk.css?v=16">
+  <link rel="stylesheet" href="category.css?v=16">
 </head>
 <body>
   <div id="authGate" class="auth-gate">
@@ -85,6 +85,15 @@
           <select id="statusFilter" hidden aria-hidden="true"><option value=""></option></select>
           <select id="monthFilter"><option value="">Tüm aylar</option></select>
         </div>
+        <div class="payment-totals" aria-live="polite">
+          <div class="payment-total-card filtered-total"><span>Filtrelenmiş toplam</span><b id="filteredPaymentTotal">—</b><small id="filteredPaymentNote">Görüntülenen harcamalar</small></div>
+          <div class="payment-total-card"><span>Tüm toplam</span><b id="allPaymentTotal">—</b><small>Filtrelerden etkilenmez</small></div>
+          <div class="payment-total-card"><span>Gösterilen kayıt</span><b id="visiblePaymentCount">—</b><small id="paymentCountNote">Toplam kayıt</small></div>
+        </div>
+        <div class="payment-category-totals">
+          <div class="payment-category-head"><strong>Kategori bazlı toplamlar</strong><small id="categoryTotalsNote">Genel toplamlar</small></div>
+          <div id="paymentCategoryTotals" class="payment-category-grid"></div>
+        </div>
         <div id="paymentList"></div>
       </article>
     </section>
@@ -131,12 +140,12 @@
     </div>
   </div>
 
-  <script src="app.js?v=15"></script>
-  <script src="calendar.js?v=15"></script>
-  <script src="repeat.js?v=15"></script>
-  <script src="bulk.js?v=15"></script>
-  <script src="category.js?v=15"></script>
-  <script type="module" src="firebase.js?v=15"></script>
-  <script>if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=15',{updateViaCache:'none'}));</script>
+  <script src="app.js?v=16"></script>
+  <script src="calendar.js?v=16"></script>
+  <script src="repeat.js?v=16"></script>
+  <script src="bulk.js?v=16"></script>
+  <script src="category.js?v=16"></script>
+  <script type="module" src="firebase.js?v=16"></script>
+  <script>if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=16',{updateViaCache:'none'}));</script>
 </body>
 </html>
