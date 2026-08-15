@@ -45,23 +45,30 @@
     return start;
   };
 
-  function renderSummary(monthRows,monthTotal){
+  function renderSummary(monthRows,monthTotal,monthKey){
     const totals={},counts={};
     monthRows.forEach(x=>{
       totals[x.category]=(totals[x.category]||0)+Number(x.amount);
       counts[x.category]=(counts[x.category]||0)+1;
     });
     calendarSummary.innerHTML=summaryCategories().map(key=>`
-      <div class="calendar-summary-card" style="--summary-color:${colorFor(key)}">
+      <button type="button" class="calendar-summary-card clickable-surface" style="--summary-color:${colorFor(key)}" data-calendar-summary-category="${esc(key)}" data-calendar-summary-month="${monthKey}">
         <span>${esc(summaryLabels[key]||key)}</span>
         <b>${tl.format(totals[key]||0)}</b>
         <small>${counts[key]||0} harcama</small>
-      </div>`).join('')+`
-      <div class="calendar-summary-card total-card">
+      </button>`).join('')+`
+      <button type="button" class="calendar-summary-card total-card clickable-surface" data-calendar-summary-month="${monthKey}">
         <span>Ay Toplamı</span>
         <b>${tl.format(monthTotal)}</b>
         <small>${monthRows.length} harcama</small>
-      </div>`;
+      </button>`;
+    calendarSummary.querySelectorAll('[data-calendar-summary-category]').forEach(button=>button.onclick=()=>{
+      const category=button.dataset.calendarSummaryCategory;
+      window.openPaymentList?.({category,month:monthKey,title:`${summaryLabels[category]||category} · ${monthName(visibleMonth)}`,source:'calendar'});
+    });
+    calendarSummary.querySelector('.total-card')?.addEventListener('click',()=>{
+      window.openPaymentList?.({month:monthKey,title:`${monthName(visibleMonth)} harcamaları`,source:'calendar'});
+    });
   }
 
   function renderDetail(map){
@@ -76,16 +83,22 @@
         const seriesNote=info?`<div class="series-note">${esc(info.label)}</div>`:'';
         const seriesActions=info?`<button onclick="editPaymentSeries('${x.id}')">Seriyi düzenle</button><button onclick="deletePaymentSeries('${x.id}')">Seriyi sil</button>`:`<button onclick="repeatPayment('${x.id}')">Tekrarla</button>`;
         return `
-        <div class="calendar-detail-row" data-category="${esc(x.category)}">
+        <div class="calendar-detail-row clickable-surface" data-category="${esc(x.category)}" data-calendar-detail-payment="${esc(x.id)}" role="button" tabindex="0" aria-label="${esc(x.name)} harcamasını düzenle">
           <div><div class="calendar-detail-name">${esc(x.name)}</div>${seriesNote}<div class="calendar-detail-meta"><span class="tag category-tag" data-category="${esc(x.category)}">${esc(x.category)}</span></div></div>
           <div class="calendar-detail-amount">${tl.format(x.amount)}</div>
           <div class="calendar-detail-meta">${fd.format(parse(x.date))}</div>
           <div class="calendar-detail-actions">
             <button onclick="editPayment('${x.id}')">Düzenle</button>
             ${seriesActions}
+            <button class="danger-action" onclick="deletePayment('${x.id}')">Sil</button>
           </div>
         </div>`;
       }).join(''):'<div class="empty">Bu tarihte harcama yok.</div>'}`;
+    calendarDayDetail.querySelectorAll('[data-calendar-detail-payment]').forEach(row=>{
+      const open=()=>editPayment(row.dataset.calendarDetailPayment);
+      row.onclick=event=>{if(!event.target.closest('button'))open()};
+      row.onkeydown=event=>{if((event.key==='Enter'||event.key===' ')&&!event.target.closest('button')){event.preventDefault();open()}};
+    });
   }
 
   function calendarHtml(map,start){
@@ -94,10 +107,10 @@
     for(let i=0;i<42;i++){
       const d=new Date(start);d.setDate(start.getDate()+i);
       const key=iso(d),rows=map[key]||[],sum=rows.reduce((s,x)=>s+Number(x.amount),0),other=d.getMonth()!==visibleMonth.getMonth();
-      html+=`<button class="calendar-day ${other?'other':''} ${rows.length?'has':''} ${key===selectedDate?'selected':''}" data-calendar-date="${key}">
+      html+=`<div class="calendar-day ${other?'other':''} ${rows.length?'has':''} ${key===selectedDate?'selected':''}" data-calendar-date="${key}" role="button" tabindex="0" aria-label="${fd.format(d)} tarihini aç">
         <div class="calendar-day-top"><span class="calendar-day-number">${d.getDate()}</span>${rows.length?`<span class="calendar-day-total">${compact(sum)} TL</span>`:''}</div>
-        ${rows.length?`<div class="calendar-dots">${rows.slice(0,7).map(x=>`<span class="calendar-dot" style="background:${colorFor(x.category)}"></span>`).join('')}</div><div class="calendar-day-names">${rows.slice(0,3).map(x=>`<span class="calendar-mini-row"><span class="calendar-mini-name">${esc(x.name)}</span><span class="calendar-mini-amount">${tl.format(x.amount)}</span></span>`).join('')}</div>`:''}
-      </button>`;
+        ${rows.length?`<div class="calendar-dots">${rows.slice(0,7).map(x=>`<span class="calendar-dot" style="background:${colorFor(x.category)}"></span>`).join('')}</div><div class="calendar-day-names">${rows.slice(0,3).map(x=>`<div class="calendar-mini-entry"><button type="button" class="calendar-mini-row" data-calendar-edit-payment="${esc(x.id)}" title="Düzenle"><span class="calendar-mini-name">${esc(x.name)}</span><span class="calendar-mini-amount">${tl.format(x.amount)}</span></button><button type="button" class="calendar-mini-delete" data-calendar-delete-payment="${esc(x.id)}" aria-label="${esc(x.name)} harcamasını sil" title="Sil">×</button></div>`).join('')}</div>`:''}
+      </div>`;
     }
     return html+'</div>';
   }
@@ -109,13 +122,25 @@
     const monthTotal=monthRows.reduce((s,x)=>s+Number(x.amount),0);
     calendarTitle.textContent=monthName(visibleMonth);
     calendarMonthTotal.textContent=`${monthRows.length} harcama · ${tl.format(monthTotal)}`;
-    renderSummary(monthRows,monthTotal);
+    renderSummary(monthRows,monthTotal,monthPrefix);
     calendarStandard.innerHTML=calendarHtml(map,start);
-    document.querySelectorAll('[data-calendar-date]').forEach(button=>button.onclick=()=>{
-      selectedDate=button.dataset.calendarDate;
+    document.querySelectorAll('[data-calendar-date]').forEach(day=>{
+      const select=()=>{
+      selectedDate=day.dataset.calendarDate;
       const d=parse(selectedDate);
       if(d.getMonth()!==visibleMonth.getMonth()||d.getFullYear()!==visibleMonth.getFullYear())visibleMonth=new Date(d.getFullYear(),d.getMonth(),1);
       renderCalendar();
+      };
+      day.onclick=event=>{if(!event.target.closest('[data-calendar-edit-payment],[data-calendar-delete-payment]'))select()};
+      day.onkeydown=event=>{if((event.key==='Enter'||event.key===' ')&&!event.target.closest('[data-calendar-edit-payment],[data-calendar-delete-payment]')){event.preventDefault();select()}};
+    });
+    calendarStandard.querySelectorAll('[data-calendar-edit-payment]').forEach(button=>button.onclick=event=>{
+      event.stopPropagation();
+      editPayment(button.dataset.calendarEditPayment);
+    });
+    calendarStandard.querySelectorAll('[data-calendar-delete-payment]').forEach(button=>button.onclick=event=>{
+      event.stopPropagation();
+      deletePayment(button.dataset.calendarDeletePayment);
     });
     renderDetail(map);
   }

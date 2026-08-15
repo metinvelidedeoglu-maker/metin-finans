@@ -1,0 +1,26 @@
+.payment-drilldown{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:14px;margin:0 0 14px;padding:13px;border:1px solid #b9d9d1;border-radius:14px;background:linear-gradient(135deg,#edf7f4,#f7fbfd)}
+.payment-drilldown[hidden]{display:none}
+.drilldown-back,.drilldown-clear{white-space:nowrap}
+.drilldown-copy{min-width:0}
+.drilldown-copy>span{display:block;color:var(--green);font-size:10px;font-weight:950;text-transform:uppercase;letter-spacing:.45px}
+.drilldown-copy strong{display:block;margin-top:2px;font-size:17px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.drilldown-copy small{display:block;color:var(--muted);margin-top:2px}
+.clickable-surface{cursor:pointer;transition:transform .16s ease,border-color .16s ease,box-shadow .16s ease,background-color .16s ease}
+.clickable-surface:hover{transform:translateY(-1px);border-color:#86aec4;box-shadow:0 8px 20px rgba(20,33,43,.11)}
+.clickable-surface:focus-visible{outline:3px solid rgba(31,92,125,.22);outline-offset:2px}
+.dashboard-category-card.clickable-surface,.payment-category-item.clickable-surface,.calendar-summary-card.clickable-surface{padding-right:32px;position:relative}
+.dashboard-category-card.clickable-surface::after,.payment-category-item.clickable-surface::after,.calendar-summary-card.clickable-surface::after{content:'›';position:absolute;right:12px;top:50%;transform:translateY(-50%);font-size:22px;font-weight:900;color:var(--blue)}
+.calendar-summary-card.total-card.clickable-surface::after{color:#fff}
+.bar-row.clickable-surface{margin:4px -8px;padding:7px 8px;border:1px solid transparent;border-radius:10px}
+.bar-row.clickable-surface:hover{background:#f6f9fb}
+.dashboard-upcoming-row{grid-template-columns:minmax(0,1fr) auto auto!important;gap:10px!important;padding:11px 8px!important;margin:0 -8px}
+.dashboard-upcoming-row .amount{white-space:nowrap}
+.inline-record-actions{display:flex;gap:5px;justify-content:flex-end}
+.inline-record-actions button{padding:7px 9px;font-size:11px}
+.inline-record-actions .danger-action,.calendar-mini-delete,.calendar-detail-actions .danger-action{background:#fee4e2;color:var(--red)}
+.payment-row.clickable-surface{border-radius:10px}
+.payment-row.clickable-surface:hover{background-color:#f7fafc}
+.payment-total-card.clickable-surface{position:relative;padding-right:35px}
+.payment-total-card.clickable-surface::after{content:'↺';position:absolute;right:13px;top:50%;transform:translateY(-50%);font-size:18px;color:var(--blue)}
+@media(max-width:760px){.payment-drilldown{grid-template-columns:1fr auto;gap:9px}.drilldown-copy{grid-column:1/-1;grid-row:1}.drilldown-back{grid-column:1;grid-row:2;justify-self:start}.drilldown-clear{grid-column:2;grid-row:2}.dashboard-upcoming-row{grid-template-columns:minmax(0,1fr) auto!important}.dashboard-upcoming-row .inline-record-actions{grid-column:1/-1;justify-content:flex-start}.inline-record-actions button{flex:1}.payment-row.clickable-surface:hover{transform:none}}
+@media(max-width:460px){.payment-drilldown{display:flex;align-items:stretch;flex-direction:column}.drilldown-back,.drilldown-clear{width:100%}.dashboard-category-card.clickable-surface{padding-right:28px}}
