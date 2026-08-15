@@ -96,19 +96,21 @@
       if(!payment)return;
       row.dataset.paymentId=payment.id;
       row.classList.add('dashboard-upcoming-row');
-      const actions=document.createElement('div');
-      actions.className='inline-record-actions';
-      const edit=document.createElement('button');
-      edit.type='button';
-      edit.textContent='Düzenle';
-      edit.onclick=event=>{event.stopPropagation();editPayment(payment.id)};
-      const remove=document.createElement('button');
-      remove.type='button';
-      remove.className='danger-action';
-      remove.textContent='Sil';
-      remove.onclick=event=>{event.stopPropagation();deletePayment(payment.id)};
-      actions.append(edit,remove);
-      row.append(actions);
+      if(!row.querySelector('.inline-record-actions')){
+        const actions=document.createElement('div');
+        actions.className='inline-record-actions';
+        const edit=document.createElement('button');
+        edit.type='button';
+        edit.textContent='Düzenle';
+        edit.onclick=event=>{event.stopPropagation();editPayment(payment.id)};
+        const remove=document.createElement('button');
+        remove.type='button';
+        remove.className='danger-action';
+        remove.textContent='Sil';
+        remove.onclick=event=>{event.stopPropagation();deletePayment(payment.id)};
+        actions.append(edit,remove);
+        row.append(actions);
+      }
       makeClickable(row,()=>editPayment(payment.id),`${payment.name} harcamasını düzenle`);
     });
   }
