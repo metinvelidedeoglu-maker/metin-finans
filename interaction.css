@@ -22,5 +22,19 @@
 .payment-row.clickable-surface:hover{background-color:#f7fafc}
 .payment-total-card.clickable-surface{position:relative;padding-right:35px}
 .payment-total-card.clickable-surface::after{content:'↺';position:absolute;right:13px;top:50%;transform:translateY(-50%);font-size:18px;color:var(--blue)}
-@media(max-width:760px){.payment-drilldown{grid-template-columns:1fr auto;gap:9px}.drilldown-copy{grid-column:1/-1;grid-row:1}.drilldown-back{grid-column:1;grid-row:2;justify-self:start}.drilldown-clear{grid-column:2;grid-row:2}.dashboard-upcoming-row{grid-template-columns:minmax(0,1fr) auto!important}.dashboard-upcoming-row .inline-record-actions{grid-column:1/-1;justify-content:flex-start}.inline-record-actions button{flex:1}.payment-row.clickable-surface:hover{transform:none}}
-@media(max-width:460px){.payment-drilldown{display:flex;align-items:stretch;flex-direction:column}.drilldown-back,.drilldown-clear{width:100%}.dashboard-category-card.clickable-surface{padding-right:28px}}
+.payment-drag-source{cursor:grab}
+.payment-drag-source:active{cursor:grabbing}
+.payment-dragging{opacity:.55!important;transform:scale(.985)!important;box-shadow:none!important}
+.calendar-day.calendar-drag-target{border-color:var(--green)!important;background:#eef8f5!important;box-shadow:inset 0 0 0 2px rgba(58,163,107,.22),0 8px 20px rgba(20,33,43,.08)}
+.calendar-drag-toast{position:fixed;left:50%;bottom:24px;z-index:1200;transform:translateX(-50%);display:flex;align-items:center;gap:14px;max-width:min(92vw,620px);padding:11px 12px 11px 16px;border:1px solid #b9d9d1;border-radius:14px;background:#12304a;color:#fff;box-shadow:0 14px 36px rgba(17,24,39,.28)}
+.calendar-drag-toast span{font-size:13px;font-weight:800}
+.calendar-drag-toast button{flex:0 0 auto;background:#fff;color:#12304a;font-weight:900}
+.calendar-drag-choice-backdrop{position:fixed;inset:0;z-index:1300;display:grid;place-items:center;padding:18px;background:rgba(12,25,36,.46);backdrop-filter:blur(2px)}
+.calendar-drag-choice{width:min(92vw,430px);padding:20px;border-radius:18px;background:#fff;box-shadow:0 24px 60px rgba(17,24,39,.3)}
+.calendar-drag-choice strong{display:block;font-size:18px}
+.calendar-drag-choice>span{display:block;margin-top:6px;font-weight:800;color:var(--blue)}
+.calendar-drag-choice small{display:block;margin-top:5px;color:var(--muted)}
+.calendar-drag-choice-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:16px}
+.calendar-drag-choice-actions [data-drag-choice="cancel"]{grid-column:1/-1}
+@media(max-width:760px){.payment-drilldown{grid-template-columns:1fr auto;gap:9px}.drilldown-copy{grid-column:1/-1;grid-row:1}.drilldown-back{grid-column:1;grid-row:2;justify-self:start}.drilldown-clear{grid-column:2;grid-row:2}.dashboard-upcoming-row{grid-template-columns:minmax(0,1fr) auto!important}.dashboard-upcoming-row .inline-record-actions{grid-column:1/-1;justify-content:flex-start}.inline-record-actions button{flex:1}.payment-row.clickable-surface:hover{transform:none}.calendar-drag-toast{bottom:92px;width:calc(100vw - 28px);justify-content:space-between}.calendar-detail-row.payment-drag-source{touch-action:pan-y}}
+@media(max-width:460px){.payment-drilldown{display:flex;align-items:stretch;flex-direction:column}.drilldown-back,.drilldown-clear{width:100%}.dashboard-category-card.clickable-surface{padding-right:28px}.calendar-drag-choice-actions{grid-template-columns:1fr}.calendar-drag-choice-actions [data-drag-choice="cancel"]{grid-column:auto}}
